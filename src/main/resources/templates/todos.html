@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link href="../../static/css/bootstrap.min.css"
+          th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="container" style="max-width: 900px">
+    <div class="py-5 text-center">
+        <h2>할일 목록</h2>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary float-end"
+                    onclick="location.href='addForm.html'"
+                    th:onclick="|location.href='@{/todos/add}'|"
+                    type="button">할일 등록</button>
+        </div>
+    </div>
+
+    <hr class="my-4">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>타이틀</th>
+                <th>설명</th>
+                <th>상태</th>
+                <th>완료처리</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="todo : ${todos}">
+                <td><a href="item.html" th:href="@{/todos/{todoId}(todoId=${todo.id})}" th:text="${todo.id}">todo_id</a></td>
+                <td ><a href="item.html" th:href="@{/todos/{todoId}(todoId=${todo.id})}" th:text="${todo.title}">상품명</a></td>
+
+                <td style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap" th:text="${todo.description}">10000</td>
+                <td th:if="${todo.end}">완료</td>
+                <td th:unless="${todo.end}">미완</td>
+                <td th:if="${todo.end}">이미완료됨</td>
+
+                <td th:unless="${todo.end}">
+                    <form th:action="@{/todos/end/{todoId}(todoId=${todo.id})}" th:method="post" >
+                        <button type="submit" class="btn btn-primary">완료하기</button>
+                    </form>
+                </a></td>
+
+                <td>
+                    <form th:action="@{/todos/delete/{todoId}(todoId=${todo.id})}" th:method="delete">
+                        <input type="hidden" name ="_method" value="delete">
+                        <button type="submit" class="btn btn-primary">삭제하기</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div> <!-- /container -->
+
+</body>
+</html>
