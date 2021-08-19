@@ -54,7 +54,7 @@ public class TodoController {
 
         Todo savedTodo = todoService.add(todo);
         redirectAttributes.addAttribute("todoId", savedTodo.getId());
-        return "redirect:/todos/{todoId}";
+        return "redirect:/todos";
     }
 
 
