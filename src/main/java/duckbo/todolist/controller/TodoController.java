@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -35,7 +37,7 @@ public class TodoController {
     @GetMapping("/todos/{todoId}")
     public String todo(@PathVariable Long todoId, Model model) {
 
-        Todo todo = todoService.findOne(todoId);
+        Todo todo = todoService.findOne(todoId).get();
         model.addAttribute("todo", todo);
 
         return "todo";
@@ -84,20 +86,31 @@ public class TodoController {
     }
 
     @DeleteMapping("/todos/delete/{todoId}")
-    public String deleteTodo(@PathVariable Long todoId) {
+    public String deleteTodo(@PathVariable Long todoId, RedirectAttributes redirectAttributes) {
 
-        todoService.remove(todoId);
+        try {
+            todoService.remove(todoId);
+        } catch (NoSuchElementException e) {
+            redirectAttributes.addAttribute("error", "이미 삭제된 todo 입니다.");
+            return "redirect:/todos";
+        }
+
 
         return "redirect:/todos";
     }
 
     @GetMapping("/todos/{todoId}/edit")
-    public String editForm(@PathVariable Long todoId, Model model) {
+    public String editForm(@PathVariable Long todoId, Model model, RedirectAttributes redirectAttributes) {
 
-        Todo todo = todoService.findOne(todoId);
-        model.addAttribute("todo", todo);
+        Optional<Todo> todoOptional = todoService.findOne(todoId);
 
-        return "editForm";
+        if (todoOptional.isPresent()) {
+            model.addAttribute("todo", todoOptional.get());
+            return "editForm";
+        } else {
+            redirectAttributes.addAttribute("error", "이미 삭제된 todo 입니다.");
+            return "redirect:/todos";
+        }
     }
 
     @PostMapping("/todos/{todoId}/edit")
@@ -110,15 +123,17 @@ public class TodoController {
         }
         else
         {
-            Todo todo = todoService.findOne(todoId);
-            todo.setTitle(todoDto.getTitle());
-            todo.setDescription(todoDto.getDescription());
-            redirectAttributes.addAttribute("todoId", todo.getId());
+            Optional<Todo> todoOptional = todoService.findOne(todoId);
+            if (todoOptional.isPresent()) {
+                Todo todo = todoOptional.get();
+                todo.setTitle(todoDto.getTitle());
+                todo.setDescription(todoDto.getDescription());
+            } else {
+                redirectAttributes.addAttribute("error", "이미 삭제된 todo 입니다.");
+            }
         }
 
         return "redirect:/todos";
-
-
     }
 
 }
