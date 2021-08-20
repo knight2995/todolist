@@ -57,7 +57,7 @@
                 </a></td>
 
                 <td>
-                    <form th:action="@{/todos/delete/{todoId}(todoId=${todo.id})}" th:method="delete">
+                    <form th:action="@{/todos/delete/{todoId}(todoId=${todo.id})}" th:method="delete" th:onsubmit="return checkDelete()">
                         <input type="hidden" name ="_method" value="delete">
                         <button type="submit" class="btn btn-primary">삭제하기</button>
                     </form>
@@ -70,4 +70,18 @@
 </div> <!-- /container -->
 
 </body>
+<script type="text/javascript">
+    function checkDelete(){
+        if (confirm("정말 삭제하시겠습니까??") == true){    //확인
+
+            return true;
+
+        }else{   //취소
+
+            return false;
+
+        }
+    }
+
+</script>
 </html>
