@@ -27,7 +27,7 @@ public class TodoRepository implements ITodoRepository{
 
     @Override
     public Optional<Todo> findById(Long id) {
-        return Optional.of(em.find(Todo.class, id));
+        return Optional.ofNullable(em.find(Todo.class, id));
     }
 
     @Override
@@ -51,7 +51,8 @@ public class TodoRepository implements ITodoRepository{
     @Override
     public void delete(Long todoId) {
 
-        em.remove(findById(todoId).get());
+        Todo todo = findById(todoId).get();
+        em.remove(todo);
 
         em.flush();
 

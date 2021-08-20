@@ -23,8 +23,8 @@
         </div>
     </div>
 
-    <script th:if="${param.error != null}">
-        alert('정상적인 프로세스로 수행해주세요.')
+    <script th:if="${param.error != null}" th:inline="javascript">
+        alert([[${param.error}]])
     </script>
 
     <hr class="my-4">

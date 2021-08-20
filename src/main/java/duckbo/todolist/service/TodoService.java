@@ -5,6 +5,8 @@ import duckbo.todolist.repository.ITodoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class TodoService {
@@ -19,8 +21,8 @@ public class TodoService {
         return todoRepository.findAll();
     }
 
-    public Todo findOne(Long todoId) {
-        return todoRepository.findById(todoId).get();
+    public Optional<Todo> findOne(Long todoId) {
+        return todoRepository.findById(todoId);
     }
 
     public Todo add(Todo todo) {
@@ -41,9 +43,14 @@ public class TodoService {
         todoRepository.update(todo.getId(),todo);
         return todo;
     }
-    public void remove(Long todoId) {
+    public void remove(Long todoId) throws NoSuchElementException{
 
-        todoRepository.delete(todoId);
+        try {
+            todoRepository.delete(todoId);
+        } catch (NoSuchElementException e) {
+            throw e;
+        }
+
     }
 
 }
