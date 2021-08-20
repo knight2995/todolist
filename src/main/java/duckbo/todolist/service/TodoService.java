@@ -34,9 +34,16 @@ public class TodoService {
         todoRepository.update(todo.getId(),todo);
         return todo;
     }
+    public Todo revertEnding(Long todoId) {
 
+        Todo todo = todoRepository.findById(todoId).get();
+        todo.setEnd(false);
+        todoRepository.update(todo.getId(),todo);
+        return todo;
+    }
     public void remove(Long todoId) {
 
         todoRepository.delete(todoId);
     }
+
 }

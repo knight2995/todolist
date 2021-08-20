@@ -43,7 +43,12 @@
                 <td style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap" th:text="${todo.description}">10000</td>
                 <td th:if="${todo.end}">완료</td>
                 <td th:unless="${todo.end}">미완</td>
-                <td th:if="${todo.end}">이미완료됨</td>
+
+                <td th:if="${todo.end}">
+                    <form th:action="@{/todos/revertEnd/{todoId}(todoId=${todo.id})}" th:method="post" >
+                        <button type="submit" class="btn btn-danger">완료취소</button>
+                    </form>
+                </a></td>
 
                 <td th:unless="${todo.end}">
                     <form th:action="@{/todos/end/{todoId}(todoId=${todo.id})}" th:method="post" >

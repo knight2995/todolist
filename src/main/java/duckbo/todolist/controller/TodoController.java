@@ -66,6 +66,14 @@ public class TodoController {
         return "redirect:/todos";
     }
 
+    @PostMapping("/todos/revertEnd/{todoId}")
+    public String revertEnd(@PathVariable Long todoId) {
+
+        Todo todo = todoService.revertEnding(todoId);
+
+        return "redirect:/todos";
+    }
+
     @DeleteMapping("/todos/delete/{todoId}")
     public String deleteTodo(@PathVariable Long todoId) {
 
