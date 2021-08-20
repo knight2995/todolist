@@ -50,11 +50,20 @@ public class TodoController {
     @PostMapping("/todos/add")
     public String addTodo(@ModelAttribute TodoDto todoDto, RedirectAttributes redirectAttributes) {
 
-        Todo todo = new Todo(todoDto.getTitle(), todoDto.getDescription());
+        //Title 공백 및 길이 체크
+        String title = todoDto.getTitle();
+        if(title.trim().length() == 0 || title.length() > 20)
+        {
+            redirectAttributes.addAttribute("error", "잘 못된 입력입니다.");
+        }
+        else
+        {
+            Todo todo = new Todo(todoDto.getTitle(), todoDto.getDescription());
 
-        Todo savedTodo = todoService.add(todo);
-        redirectAttributes.addAttribute("todoId", savedTodo.getId());
-        return "redirect:/todos/{todoId}";
+            Todo savedTodo = todoService.add(todo);
+        }
+
+        return "redirect:/todos";
     }
 
 
@@ -62,6 +71,14 @@ public class TodoController {
     public String endingProcess(@PathVariable Long todoId) {
 
         Todo todo = todoService.ending(todoId);
+
+        return "redirect:/todos";
+    }
+
+    @PostMapping("/todos/revertEnd/{todoId}")
+    public String revertEnd(@PathVariable Long todoId) {
+
+        Todo todo = todoService.revertEnding(todoId);
 
         return "redirect:/todos";
     }
@@ -86,14 +103,22 @@ public class TodoController {
     @PostMapping("/todos/{todoId}/edit")
     public String edit(@PathVariable Long todoId, @ModelAttribute TodoDto todoDto, RedirectAttributes redirectAttributes) {
 
-        Todo todo = todoService.findOne(todoId);
-        todo.setTitle(todoDto.getTitle());
-        todo.setDescription(todoDto.getDescription());
+        String title = todoDto.getTitle();
+        if(title.trim().length() == 0 || title.length() > 20)
+        {
+            redirectAttributes.addAttribute("error", "잘 못된 입력입니다.");
+        }
+        else
+        {
+            Todo todo = todoService.findOne(todoId);
+            todo.setTitle(todoDto.getTitle());
+            todo.setDescription(todoDto.getDescription());
+            redirectAttributes.addAttribute("todoId", todo.getId());
+        }
 
-        redirectAttributes.addAttribute("todoId", todo.getId());
+        return "redirect:/todos";
 
-        return "redirect:/todos/{todoId}";
+
     }
-
 
 }

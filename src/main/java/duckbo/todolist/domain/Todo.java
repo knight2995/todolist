@@ -1,12 +1,10 @@
 package duckbo.todolist.domain;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter @Setter
@@ -16,7 +14,10 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NonNull
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
     private boolean end;
 
