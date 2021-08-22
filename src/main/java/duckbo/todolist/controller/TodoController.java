@@ -35,12 +35,20 @@ public class TodoController {
     }
 
     @GetMapping("/todos/{todoId}")
-    public String todo(@PathVariable Long todoId, Model model) {
+    public String todo(@PathVariable Long todoId, Model model, RedirectAttributes redirectAttributes) {
 
-        Todo todo = todoService.findOne(todoId).get();
-        model.addAttribute("todo", todo);
-
-        return "todo";
+        try {
+            Todo todo = todoService.findOne(todoId).get();
+            model.addAttribute("todo", todo);
+            return "todo";
+        } catch (NoSuchElementException e) {
+            if (todoId < 0) {
+                redirectAttributes.addAttribute("error", "잘못된 입력입니다.");
+            } else {
+                redirectAttributes.addAttribute("error","존재하지 않는 todo 입니다.");
+            }
+            return "redirect:/todos";
+        }
 
     }
 
