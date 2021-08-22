@@ -17,10 +17,10 @@
 <div class="container">
 
     <div class="py-5 text-center">
-        <h2>할일 수정 폼</h2>
+        <h2>할일 수정</h2>
     </div>
 
-    <form action="todo.html" th:action method="post" th:onsubmit="return checkTitleLength()>
+    <form action="todo.html" th:action method="post" th:onsubmit="return checkTitleLength()">
         <div>
             <label for="id">할일 ID</label>
             <input type="text" id="id" name="id" class="form-control" value="1" th:value="${todo.id}" readonly>
