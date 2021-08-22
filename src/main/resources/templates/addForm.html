@@ -17,18 +17,18 @@
 <div class="container">
 
     <div class="py-5 text-center">
-        <h2>할일 입력 폼</h2>
+        <h2>할일 입력</h2>
     </div>
 
     <h4 class="mb-3">할일 입력</h4>
 
     <form action="item.html" th:action method="post" th:class="form-outline" th:onsubmit="return checkTitleLength()">
         <div>
-            <label for="title">Title</label>
+            <label for="title">타이틀</label>
             <input type="text" id="title" name="title" class="form-control" placeholder="타이틀을 입력하세요(20자 제한)">
         </div>
         <div>
-            <label for="description">Description</label>
+            <label for="description">설명</label>
             <textarea type="textarea" id="description" name="description" class="form-control" rows= 7 placeholder="설명을 입력하세요"></textarea>
         </div>
 

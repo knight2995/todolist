@@ -56,7 +56,7 @@ public class TodoController {
         String title = todoDto.getTitle();
         if(title.trim().length() == 0 || title.length() > 20)
         {
-            redirectAttributes.addAttribute("error", "잘 못된 입력입니다.");
+            redirectAttributes.addAttribute("error", "잘못된 입력입니다.");
         }
         else
         {
@@ -119,7 +119,7 @@ public class TodoController {
         String title = todoDto.getTitle();
         if(title.trim().length() == 0 || title.length() > 20)
         {
-            redirectAttributes.addAttribute("error", "잘 못된 입력입니다.");
+            redirectAttributes.addAttribute("error", "잘못된 입력입니다.");
         }
         else
         {
