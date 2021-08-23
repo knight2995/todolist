@@ -28,8 +28,8 @@ public class TodoController {
     @GetMapping("/todos")
     public String todos(Model model) {
 
-        List<Todo> todos = todoService.findTodos();
-        model.addAttribute("todos", todos);
+        List<TodoDto> todoDtoList = todoService.findTodos();
+        model.addAttribute("todos", todoDtoList);
 
         return "todos";
     }
@@ -38,8 +38,8 @@ public class TodoController {
     public String todo(@PathVariable Long todoId, Model model, RedirectAttributes redirectAttributes) {
 
         try {
-            Todo todo = todoService.findOne(todoId).get();
-            model.addAttribute("todo", todo);
+            TodoDto todoDto = todoService.findOne(todoId).get();
+            model.addAttribute("todo", todoDto);
             return "todo";
         } catch (NoSuchElementException e) {
             if (todoId < 0) {
@@ -68,9 +68,7 @@ public class TodoController {
         }
         else
         {
-            Todo todo = new Todo(todoDto.getTitle(), todoDto.getDescription());
-
-            Todo savedTodo = todoService.add(todo);
+            TodoDto savedTodoDto = todoService.add(todoDto);
         }
 
         return "redirect:/todos";
@@ -80,7 +78,7 @@ public class TodoController {
     @PostMapping("/todos/end/{todoId}")
     public String endingProcess(@PathVariable Long todoId) {
 
-        Todo todo = todoService.ending(todoId);
+        TodoDto todoDto = todoService.ending(todoId);
 
         return "redirect:/todos";
     }
@@ -88,7 +86,7 @@ public class TodoController {
     @PostMapping("/todos/revertEnd/{todoId}")
     public String revertEnd(@PathVariable Long todoId) {
 
-        Todo todo = todoService.revertEnding(todoId);
+        TodoDto todoDto = todoService.revertEnding(todoId);
 
         return "redirect:/todos";
     }
@@ -110,7 +108,7 @@ public class TodoController {
     @GetMapping("/todos/{todoId}/edit")
     public String editForm(@PathVariable Long todoId, Model model, RedirectAttributes redirectAttributes) {
 
-        Optional<Todo> todoOptional = todoService.findOne(todoId);
+        Optional<TodoDto> todoOptional = todoService.findOne(todoId);
 
         if (todoOptional.isPresent()) {
             model.addAttribute("todo", todoOptional.get());
@@ -131,11 +129,9 @@ public class TodoController {
         }
         else
         {
-            Optional<Todo> todoOptional = todoService.findOne(todoId);
+            Optional<TodoDto> todoOptional = todoService.findOne(todoId);
             if (todoOptional.isPresent()) {
-                Todo todo = todoOptional.get();
-                todo.setTitle(todoDto.getTitle());
-                todo.setDescription(todoDto.getDescription());
+                todoService.update(todoId,todoDto);
             } else {
                 redirectAttributes.addAttribute("error", "이미 삭제된 todo 입니다.");
             }
